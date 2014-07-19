@@ -3,7 +3,7 @@ import time
 import json
 import random
 import string
-from flask import Flask, request, g, render_template, redirect, jsonify
+from flask import Flask, request, g, render_template, redirect
 app = Flask(__name__)
 
 DATABASE = 'torMessages.db'

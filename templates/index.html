@@ -38,16 +38,6 @@
     <script>
     $(function() {
 
-      makeid = function() {
-          var text = "";
-          var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-          for( var i=0; i < 5; i++ )
-              text += possible.charAt(Math.floor(Math.random() * possible.length));
-
-          return text;
-      }
-
       var sender = '{{sender}}';
 
       update_messages = function() {
@@ -84,7 +74,7 @@
 
       update_messages();
 
-      setInterval(update_messages(), 1000);
+      setInterval(update_messages, 4000);
     });
     </script>
   </head>

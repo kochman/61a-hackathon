@@ -4,7 +4,7 @@ import shallot
 import stem.process
 import tempfile
 
-from server import app
+from interface import app
 
 class ChatHiddenService():
 
