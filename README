@@ -2,10 +2,14 @@ A chat program that runs as a Tor hidden service. Clients connect to the hidden 
 
 The Tor hidden service may take up to a minute to show up. The interface tries to refresh the message list every 4 seconds.
 
+Requires Tor and the Stem control library.
+
 USAGE
 
 python3 chattor.py
 
 python3 chattor.py --prefix KEY_PREFIX
 
-If KEY_PREFIX is specified, Chattor will try to create an Onion public key with it.
+If KEY_PREFIX is specified, Chattor will try to create an Onion public key with it using Shallot.
+
+The Shallot in this repo is built for OS X, so please build it for your architecture if you must: https://github.com/katmagic/Shallot
