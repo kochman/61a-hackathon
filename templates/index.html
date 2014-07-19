@@ -1,7 +1,8 @@
 <html>
   <head>
     <title>Messager</title>
-    <style type="text/css"> 
+    <script src="/static/jquery-2.1.1.min.js"></script>
+    <style type="text/css">
     .chatBox {
       outline: dotted;
       outline-color: #FFFF00
@@ -13,22 +14,68 @@
       list-style: none;
     }
     </style>
+    <script>
+    $(function() {
+
+      makeid = function() {
+          var text = "";
+          var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+          for( var i=0; i < 5; i++ )
+              text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+          return text;
+      }
+
+      var sender = '{{sender}}';
+
+      update_messages = function() {
+        $.get("/api/messages", function(data) {
+          data = $.parseJSON(data);
+          $("#chatBox ul").html('');
+          for (var i = data.length - 1; i >= 0; i--) {
+            message = data[i];
+            console.log(message);
+            $("#chatBox ul").append('<li><code>' + message[1] + '</code>:  ' + message[0] + '</li>');
+          };
+        });
+      }
+
+      send_message = function() {
+        var message = $("#message").val();
+        if (message.length == 0) return;
+        var data = {'sender': sender, 'message': message};
+        $.post("/api/send", data, function(data) {
+          update_messages();
+        });
+      }
+
+      $("#send").click(function() {
+        send_message();
+      });
+
+      $('#message').keypress(function (e) {
+        if (e.which == 13) {
+          send_message();
+          $("#message").val('');
+        }
+      });
+
+      update_messages();
+
+      setInterval(update_messages(), 1000);
+    });
+    </script>
   </head>
   <body>
     <h1 class="header"> Tor Chat </h1>
-    {% for message in messages %}
-    <div class="chatBox">
+    <div id="chatBox">
       <ul>
-        <li>{{ message[0] }}</li>
       </ul>
-    </div class="chatBox">
-    {% endfor %}
+    </div>
     
-    <form action='/api/send' method="POST">
-      Message:
-      <input name="msg" type="text" /> 
-      <input name="send" type="submit" />
-  </form>
+      <input type="text" id="message" placeholder="Message" />
+      <button id="send">Send</button>
   </body>
 </html>
 
