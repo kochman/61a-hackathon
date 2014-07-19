@@ -10,7 +10,7 @@ def get_db():
     if db is None:
     	db = g._database = sqlite3.connect(DATABASE)
     	c = db.cursor()
-    	c.execute("CREATE TABLE IF NOT EXISTS messages (message)")
+    	c.execute("CREATE TABLE IF NOT EXISTS messages (message TEXT, sender TEXT, time TEXT)")
     	get_db().commit()
     return db
 
@@ -25,10 +25,10 @@ def db_read_messages():
     cur.execute("SELECT * FROM messages")
     return cur.fetchall()
 
-def db_add_message(message):
+def db_add_message(message, sender):
     cur = get_db().cursor()
     t = str(time.time())
-    cur.execute("INSERT INTO messages VALUES (?)", (message, ))
+    cur.execute("INSERT INTO messages VALUES (?, ?, ?)", (message, sender, t))
     get_db().commit()
 
 @app.route("/")
@@ -39,8 +39,7 @@ def hello():
 
 @app.route("/api/send", methods=["POST"])
 def receive_message():
-    print(request.form)
-    db_add_message(request.form['msg'])
+    db_add_message(request.form['msg'], request.form['sender'])
     return redirect("/")
 
 if __name__ == "__main__":
