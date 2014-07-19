@@ -1,17 +1,38 @@
 <html>
   <head>
-    <title>Messager</title>
+    <title>Chattor</title>
     <script src="/static/jquery-2.1.1.min.js"></script>
     <style type="text/css">
-    .chatBox {
+    body {
+      background-color: black
+    }
+    div.bodyWrapper {
       outline: dotted;
-      outline-color: #FFFF00
+      outline-color: 9900CC;
     }
-    .header {
-      color: #0000FF
+    div.bottomLine {
+      outline: dotted;
+      outline-color: 9900CC;
+      position: relative;
+
     }
+    #chatBox {
+      width: 60%;
+      float: left;
+    }
+
     li {
       list-style: none;
+      color: #FFFFFF;
+    }
+    div.logoWrapper {
+      width: 40%;
+
+      float: right;
+    }
+    div.logoWrapper img {
+      max-width: 100%;
+      max-height: 100%
     }
     </style>
     <script>
@@ -68,38 +89,14 @@
     </script>
   </head>
   <body>
-    <h1 class="header"> Tor Chat </h1>
+    <div class=logoWrapper>
+      <img id="logo" src="/static/chattorlogo.jpg" alt="logo">
+    </div>
     <div id="chatBox">
       <ul>
       </ul>
-    </div>
-    
       <input type="text" id="message" placeholder="Message" />
       <button id="send">Send</button>
   </body>
+</div>
 </html>
-
-<!-- <html>
-    <head>
-      <title>Cheeper - better than Twitter</title>
-    </head>
-    <body>
-      <h1>Cheeper</h1>
-      <form action='/api/cheep' method="POST">
-        Name:
-        <input name="name" type="text" /> 
-        Cheep:
-        <input name="cheep" type="text" maxlength="76" /> 
-        <input type="submit" />
-      </form>
-    <div id="feed">
-        <h2> Cheeps </h2>
-        {% for cheep in cheeps %}
-        <div class="cheep">
-            <b>{{ cheep[0] }}</b>
-            <p>{{ cheep[2] }}</p>
-        </div>
-          {% endfor %}
-    </div>
-    </body>
-</html> -->
