@@ -1,0 +1,58 @@
+<html>
+  <head>
+    <title>Messager</title>
+    <style type="text/css"> 
+    .chatBox {
+      outline: dotted;
+      outline-color: #FFFF00
+    }
+    .header {
+      color: #0000FF
+    }
+    li {
+      list-style: none;
+    }
+    </style>
+  </head>
+  <body>
+    <h1 class="header"> Tor Chat </h1>
+    {% for message in messages %}
+    <div class="chatBox">
+      <ul>
+        <li>{{ message[0] }}</li>
+      </ul>
+    </div class="chatBox">
+    {% endfor %}
+    
+    <form action='/api/send' method="POST">
+      Message:
+      <input name="msg" type="text" /> 
+      <input name="send" type="submit" />
+  </form>
+  </body>
+</html>
+
+<!-- <html>
+    <head>
+      <title>Cheeper - better than Twitter</title>
+    </head>
+    <body>
+      <h1>Cheeper</h1>
+      <form action='/api/cheep' method="POST">
+        Name:
+        <input name="name" type="text" /> 
+        Cheep:
+        <input name="cheep" type="text" maxlength="76" /> 
+        <input type="submit" />
+      </form>
+    <div id="feed">
+        <h2> Cheeps </h2>
+        {% for cheep in cheeps %}
+        <div class="cheep">
+            <b>{{ cheep[0] }}</b>
+            <p>{{ cheep[2] }}</p>
+        </div>
+          {% endfor %}
+    </div>
+    </body>
+</html> -->

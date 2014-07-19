@@ -1,14 +1,93 @@
-from flask import Flask, request
+import sqlite3
+import time
+from flask import Flask, request, g, render_template, redirect
 app = Flask(__name__)
+
+DATABASE = 'torMessages.db'
+
+def get_db():
+    db = getattr(g, '_database', None)
+    if db is None:
+    	db = g._database = sqlite3.connect(DATABASE)
+    	c = db.cursor()
+    	c.execute("CREATE TABLE IF NOT EXISTS messages (message)")
+    	get_db().commit()
+    return db
+
+@app.teardown_appcontext
+def close_connection(exception):
+    db = getattr(g, '_database', None)
+    if db is not None:
+        db.close()
+
+def db_read_messages():
+    cur = get_db().cursor()
+    cur.execute("SELECT * FROM messages")
+    return cur.fetchall()
+
+def db_add_message(message):
+    cur = get_db().cursor()
+    t = str(time.time())
+    cur.execute("INSERT INTO messages VALUES (?)", (message, ))
+    get_db().commit()
 
 @app.route("/")
 def hello():
-    return app.send_static_file('index.html')
+    messages = db_read_messages()
+    print(messages)
+    return render_template('index.html', messages=messages)
 
 @app.route("/api/send", methods=["POST"])
-def recive_msg():
-	print(request.form)
-	return "Success!"
-	
+def receive_message():
+    print(request.form)
+    db_add_message(request.form['msg'])
+    return redirect("/")
+
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
+
+# import sqlite3
+# import time
+# from flask import Flask, g, request, render_template, redirect
+
+# app = Flask(__name__)
+# DATABASE = 'cheeps.db'
+
+# def get_db():
+#     db = getattr(g, '_database', None)
+#     if db is None:
+#         db = g._database = sqlite3.connect(DATABASE)
+#     return db
+
+# @app.teardown_appcontext
+# def close_connection(exception):
+#     db = getattr(g, '_database', None)
+#     if db is not None:
+#         db.close()
+
+# def db_read_cheeps():
+#     cur = get_db().cursor()
+#     cur.execute("SELECT * FROM cheeps")
+#     return cur.fetchall()
+
+# def db_add_cheep(name, cheep):
+#     cur = get_db().cursor()
+#     t = str(time.time())
+#     cheep_info = (name, t, cheep)
+#     cur.execute("INSERT INTO cheeps VALUES (?, ?, ?)", cheep_info)
+#     get_db().commit()
+
+# @app.route("/")
+# def hello():
+#     cheeps = db_read_cheeps()
+#     print(cheeps)
+#     return render_template('index.html', cheeps=cheeps)
+
+# @app.route("/api/cheep", methods=["POST"])
+# def receive_cheep():
+#     print(request.form)
+#     db_add_cheep(request.form['name'], request.form['cheep'])
+#     return redirect("/")
+
+# if __name__ == "__main__":
+#     app.run()
